@@ -4,7 +4,8 @@
  * Remix this as the starting point for following the WhatsApp Echo Bot tutorial
  *
  */
-
+try
+{
 "use strict";
 // Access token for your app
 // (copy token from DevX getting started page
@@ -100,10 +101,6 @@ const request = require("request"),
 // Sets server port and logs message on success
 app.listen(process.env.PORT || 1337, () => console.log("webhook is listening"));
 
-window.onerror = function myErrorHandler(errorMsg, url, lineNumber) {
-    console.log("Error occured: " + errorMsg + url + lineNumber);//or any message
-    return false;
-}
 
 // Accepts POST requests at /webhook endpoint
 app.post("/webhook", (req, res) => {
@@ -639,3 +636,9 @@ app.get('/', function(req, res) {
   console.log(req);
   res.send('<pre>' + JSON.stringify(received_updates, null, 2) + '</pre>');
 });
+}
+
+catch (err){
+
+console.log(err.message);  
+}
