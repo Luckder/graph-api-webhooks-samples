@@ -107,9 +107,9 @@ app.post("/webhook", (req, res) => {
 
   // Check the Incoming webhook message
 
-  /*
+  
   console.log(JSON.stringify(req.body, null, 2));
-  */
+  
 
   // info on WhatsApp text message payload: https://developers.facebook.com/docs/whatsapp/cloud-api/webhooks/payload-examples#text-messages
   if (req.body.object) {
@@ -975,8 +975,6 @@ app.get("/webhook", (req, res) => {
    *This will be the Verify Token value when you set up webhook
    **/
   const verify_token = process.env.VERIFY_TOKEN;
-
-  console.log(verify_token)
   // Parse params from the webhook verification request
   let mode = req.query["hub.mode"];
   let token = req.query["hub.verify_token"];
