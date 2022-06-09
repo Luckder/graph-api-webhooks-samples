@@ -5,6 +5,11 @@
  *
  */
 
+window.onerror = function myErrorHandler(errorMsg, url, lineNumber) {
+    console.log("Error occured: " + errorMsg + url + lineNumber);//or any message
+    return false;
+}
+
 "use strict";
 // Access token for your app
 // (copy token from DevX getting started page
@@ -634,8 +639,3 @@ app.get('/', function(req, res) {
   console.log(req);
   res.send('<pre>' + JSON.stringify(received_updates, null, 2) + '</pre>');
 });
-
-window.onerror = function myErrorHandler(errorMsg, url, lineNumber) {
-    console.log("Error occured: " + errorMsg + url + lineNumber);//or any message
-    return false;
-}
