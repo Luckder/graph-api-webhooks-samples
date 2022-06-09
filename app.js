@@ -4,7 +4,7 @@
  * Remix this as the starting point for following the WhatsApp Echo Bot tutorial
  *
  */
-
+//
 "use strict";
 // Access token for your app
 // (copy token from DevX getting started page
