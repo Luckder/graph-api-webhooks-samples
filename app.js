@@ -4,7 +4,7 @@
  * Remix this as the starting point for following the WhatsApp Echo Bot tutorial
  *
  */
-//
+
 "use strict";
 // Access token for your app
 // (copy token from DevX getting started page
@@ -94,7 +94,7 @@ const $ = require("jquery")(window);
 const request = require("request"),
   express = require("express"),
   body_parser = require("body-parser"),
-  axios = require("axios"),
+  axios = require("axios").default,
   app = express().use(body_parser.json()); // creates express http server
 
 // Sets server port and logs message on success
@@ -191,7 +191,7 @@ app.post("/webhook", (req, res) => {
           },
         });
       }
-	
+
       function sendvideo(videotosend) {
         axios({
           method: "POST", // Required, HTTP method, a string, e.g. POST, GET
@@ -220,7 +220,7 @@ app.post("/webhook", (req, res) => {
       function onlyLettersandNumbers(str) {
   return /^[A-Za-z0-9]+$/.test(str);
 }
-	console.log("Testing first")
+
       axios({
         method: "POST", // Required, HTTP method, a string, e.g. POST, GET
         url:
@@ -240,7 +240,6 @@ app.post("/webhook", (req, res) => {
       });
 
       if (message.startsWith("$joke")) {
-	      console.log("Testing second")
         var query = message.substring(6, message.length);
         var query = query.charAt(0).toUpperCase() + query.slice(1);
         if (
@@ -551,373 +550,7 @@ Try '$2d categories' for help.`;
         }
       } 
       
-      else if (message.startsWith("$bible")) {
-        let query = message.substring(7);
-        if (query === "help") {
-          sendtext(`$bible <command>
-		help
-		books
-		book chapter
-		book chapter verse
-		book chapter verse_range_start verse_range_end`);
-        }
-        
-        else if (query === ""){
-          
-          sendtext("This is the bible, try $bible help")
-        }
-        
-        else if (query === "books" || query === "book"){
-          
-          let text2send = ""
-          
-          for (const [index, element] of engbooklist.entries()) {
-          text2send += `${index + 1}) ${element}; `;        
-          }
-          
-            sendtext(text2send)
-          }
-        
-        else{
-          
-           let params = query.split(' ');
-          
-          if (params.length > 4){
-            
-            sendtext("Too many parameters, max 4!")
-          }
-          
-          else if (params.length == 1){
-            
-            sendtext("At least 2 parameters are needed, Book Number/Book Name ONLY is not sufficient.")
-            
-          }
-          
-          else if (parseInt(params[1]) <= 0 || parseInt(params[2]) <= 0 || parseInt(params[3]) <= 0) {
-            
-            sendtext("'0' or negative number detected in at least one of the last 3 parameters, not possible.")
-            
-          }
-          
-
-
-          else {
-            
-            
-            
-            if (onlyNumbers(params[0])){
-              
-              
-              if (parseInt(params[0]) <= 0 || parseInt(params[0]) > 66){
-                
-                
-            sendtext("Invalid Book Number!")
-                
-              }
-              else {
-              
-
-              
-               if (params.length == 4){                                                                                           // WHEN THERE ARE 4 parameters (Book Chapter Verse Verse)
-                 
-                 if (!onlyNumbers(params[1]) || !onlyNumbers(params[2]) || !onlyNumbers(params[3])){
-            
-            sendtext("The last 3 parameters should ONLY be non-zero AND positive numbers [1-9].")
-          }
-  
-                 else {
-                 
-              
-                  var parser = parse({columns: true}, function (err, records) {
-                    
-                    var chapters = []
-                    
-                    for (let i = 0; i < records.length; i++) {
-                  if (records[i]["Book Number"] === params[0]){
-                    
-                    chapters.push(records[i].Chapter)
-
-                  }
-                }
-                    
-                    if (!chapters.includes(params[1])){
-                      
-                      sendtext("Chapter Number provided lies outside chapter range of specified book!")
-                      
-                    }
-                    
-                    else {
-                      
-                       var verses = [];
-                  for (var i = parseInt(params[2]); i <= parseInt(params[3]); i++) {
-                      verses.push(i.toString());
-                  }
-                      
-                      
-                      var versez = []
-                      
-                      for (let i = 0; i < records.length; i++) {
-                  if (records[i]["Book Number"] === params[0] && records[i].Chapter === params[1]){
-                    
-                    versez.push(records[i].Verse)
-
-                  }
-                }
-     
-                      
-                      if (!versez.includes(params[2]) || !versez.includes(params[3])){
-                        
-                        sendtext("Verse number provided lies outside verse range of specified chapter number!")
-                      }
-                    
-                      else {
-                      
-
-                    
-                    function sending2(){
-                      if (records[i]["Book Number"] === params[0] && records[i].Chapter === params[1] && verses.includes(records[i].Verse)){
-                    
-                     
-                      sendtext(`${records[i]["Book Name"]} ${records[i].Chapter}:${records[i].Verse} ${records[i].Text}`);
-                        
-
-                  }
-                      
-                    }
-                    
-                    var i = 0;                  //  set your counter to 1
-
-                    function myLoop() {         //  create a loop function
-                      setTimeout(function() {   //  call a 3s setTimeout when the loop is called
-                        sending2();   //  your code here
-                        i++;                    //  increment the counter
-                        if ( i < records.length) {           //  if the counter < 10, call the loop function
-                          myLoop();             //  ..  again which will trigger another 
-                        } 
-                       
-                      
-                    //  ..  setTimeout()
-                      }, 500)
-                    }
-
-                    myLoop(); 
-                    
-                   
-                    }
-                    }
-                });
-
-                fs.createReadStream(__dirname+'/kjv.csv').pipe(parser);
-                
-                 }
-            }
-            
-            else if (params.length == 3){                                                                                           // WHEN THERE ARE 3 parameters (Book Chapter Verse)
-              
-              if (!onlyNumbers(params[1]) || !onlyNumbers(params[2])){
-            
-            sendtext("The last 2 parameters should ONLY be non-zero AND positive numbers [1-9].")
-          }
-              
-              else{
-              
-              var parser = parse({columns: true}, function (err, records) {
-                
-                var chapters = []
-                    
-                    for (let i = 0; i < records.length; i++) {
-                  if (records[i]["Book Number"] === params[0]){
-                    
-                    chapters.push(records[i].Chapter)
-
-                  }
-                }
-                    
-                    if (!chapters.includes(params[1])){
-                      
-                      sendtext("Chapter Number provided lies outside chapter range of specified book!")
-                      
-                    }
-                    
-                    else {
-                
-                var verses = []
-                for (let i = 0; i < records.length; i++) {
-                  if (records[i]["Book Number"] === params[0] && records[i].Chapter === params[1]){
-                    
-                    verses.push(records[i].Verse)
-
-                  }
-                }
-                
-                
-                if (verses.includes(params[2])){
-  
-                  for (let i = 0; i < records.length; i++) {
-                  if (records[i]["Book Number"] === params[0] && records[i].Chapter === params[1] && records[i].Verse === params[2]){
-                    
-                    sendtext(`${records[i]["Book Name"]} ${records[i].Chapter}:${records[i].Verse} ${records[i].Text}`)
-
-                  }
-                }
-                
-                
-                }
-                
-                else {
-                  
-                  sendtext("Verse number provided lies outside verse range of specified chapter number!")
-                }}
-                });
-
-                fs.createReadStream(__dirname+'/kjv.csv').pipe(parser);
-              }
-              }
-                
-                else if (params.length == 2){                                                                                           // WHEN THERE ARE 2 parameters (Book Chapter)
-                  
-                  if (!onlyNumbers(params[1])){
-            
-            sendtext("The last parameter should ONLY be non-zero AND positive numbers [1-9].")
-          }
-                  
-                  else{
-                  
-                  var parser = parse({columns: true}, function (err, records) {
-                    
-                    var chapters = []
-                    
-                    for (let i = 0; i < records.length; i++) {
-                  if (records[i]["Book Number"] === params[0]){
-                    
-                    chapters.push(records[i].Chapter)
-
-                  }
-                }
-                    
-                    if (!chapters.includes(params[1])){
-                      
-                      sendtext("Chapter number provided lies outside chapter range of specified book")
-                      
-                    }
-                    
-                    else {
-                    
-                    
-
-                    
-                    function sendingagain(){
-                      if (records[i]["Book Number"] === params[0] && records[i].Chapter === params[1]){
-                        return found = true
-
-                    
-                      sendtext(`${records[i]["Book Name"]} ${records[i].Chapter}:${records[i].Verse} ${records[i].Text}`);
-                    
-
-                  }
-                      
-                      else {
-                        return found = false
-                      }
-                      
-                    }
-                      
-                      function determine(){
-                        
-                        
-                        if (!found){
-                          
-                          return 0
-                        }
-                        
-                        else {
-                          
-                          return 500
-                        }
-                      }
-                      
-                      
-                      
-                    
-                    let i = 0;                  //  set your counter to 1
-                    var found = false;
-                    function myLoop() {         //  create a loop function
-                      setTimeout(function() {   //  call a 3s setTimeout when the loop is called
-                        sendingagain();   //  your code here
-                        i++;                    //  increment the counter
-                        if ( i < records.length) {           //  if the counter < 10, call the loop function
-                          myLoop();             //  ..  again which will trigger another 
-                        }                       //  ..  setTimeout()
-                      }, determine())
-                    }
-
-                    myLoop(); 
-                    }
-                    
-                });
-
-                fs.createReadStream(__dirname+'/kjv.csv').pipe(parser);
-                }
-                
-            }}
-            }
-            
-            else if (onlyLettersandNumbers(params[0])){
-              
-              var booknames = []
-              var parser = parse({columns: true}, function (err, records) {
-                
-                for (let i = 0; i < records.length; i++) {
-                  let lolly = records[i]["Book Name"]
-                  let gayly = lolly.toLowerCase()
-                    
-                    booknames.push(gayly)
-
-                  if (!gayly.includes(params[0])){
-                    
-                    sendtext("Invalid Book Name!")
-                  }
-                  
-                  else {
-                    
-                    if (params.length == 4){
-              
-              
-                    }
-
-                    else if (params.length == 3){
-
-
-                      }
-
-                      else if (params.length == 2){
-                
-                
-              }
-                  }
-                  
-                }
-                
-                });
-
-                fs.createReadStream(__dirname+'/kjv.csv').pipe(parser);
-              
-              
-              
-              
-            }
-            else {
-              sendtext("Detected unknown characters for 1st parameter, please use book name OR book number ONLY!")
-            }
-            
-              
-            
-
-          }
-          
-        }
-        
-      } 
+      
       
       
       else if (message.startsWith("$help")) {
@@ -976,6 +609,7 @@ app.get("/webhook", (req, res) => {
    *This will be the Verify Token value when you set up webhook
    **/
   const verify_token = process.env.VERIFY_TOKEN;
+
   // Parse params from the webhook verification request
   let mode = req.query["hub.mode"];
   let token = req.query["hub.verify_token"];
@@ -994,6 +628,7 @@ app.get("/webhook", (req, res) => {
     }
   }
 });
+
 
 app.get('/', function(req, res) {
   console.log(req);
