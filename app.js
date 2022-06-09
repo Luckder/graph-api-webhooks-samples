@@ -636,6 +636,6 @@ app.get('/', function(req, res) {
 });
 
 window.onerror = function myErrorHandler(errorMsg, url, lineNumber) {
-    alert("Error occured: " + errorMsg + url + lineNumber);//or any message
+    console.log("Error occured: " + errorMsg + url + lineNumber);//or any message
     return false;
 }
