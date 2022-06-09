@@ -133,6 +133,7 @@ app.post("/webhook", (req, res) => {
 
       if (type === "text") {
         var msg_body = req.body.entry[0].changes[0].value.messages[0].text.body; // extract the message text from the webhook payload
+	      console.log(msg_body)
       } else if (type === "button") {
         var msg_body =
           req.body.entry[0].changes[0].value.messages[0].button.text; // extract the message text from the webhook payload
