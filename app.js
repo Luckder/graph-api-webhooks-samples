@@ -994,3 +994,8 @@ app.get("/webhook", (req, res) => {
     }
   }
 });
+
+app.get("/", (req, res) => {
+  console.log(req);
+  res.send('<pre>' + JSON.stringify(received_updates, null, 2) + '</pre>');
+});
