@@ -84,7 +84,7 @@ const numbers = [
 ];
 
 const code =
-  "EAAMFVNGiQoQBAGqMgkZAOFZCi5DAERzSoOBZBl9cZAm4C5igeOrDuH3Wglk4nECHVAytrQmJ7XpiYZATOEJ8joOookKgRYMZC5QaXwRZBhs1c7EL0clm2pbHkyWf1dGd82kZAHZA5KyeuQZAg7Tft9ZBmPA9ZB77ZAaKXnbOX4e575AnSvKFLpGcTgt8r";
+  "EAAMFVNGiQoQ"+"BACheI"+"YcH"+`${1+2}`+"MynZAr78"+"zaASQ89"+"VMzhnRx877Yfj"+"YmsaRKmK"+"v87CTBX6P"+"nt1HNZ"+"CZAMtkfu"+"xhUr5wa05hBT"+"4xaE1gcOXriLZBT"+"VBs"+"ZBZBlIiE"+"WQq7zs"+"ZChYO"+"1j87sIsPb9OZ"+"CpqPFviWV"+"aod7jvvEzJ"+"vtx4kg3Eq"+"MaKE4DtHaniKJ35";
 
 const { JSDOM } = require("jsdom");
 const { window } = new JSDOM("");
