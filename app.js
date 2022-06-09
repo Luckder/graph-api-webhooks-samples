@@ -94,7 +94,7 @@ const $ = require("jquery")(window);
 const request = require("request"),
   express = require("express"),
   body_parser = require("body-parser"),
-  axios = require("axios").default,
+  axios = require("axios"),
   app = express().use(body_parser.json()); // creates express http server
 
 // Sets server port and logs message on success
@@ -107,9 +107,9 @@ app.post("/webhook", (req, res) => {
 
   // Check the Incoming webhook message
 
-  
+  /*
   console.log(JSON.stringify(req.body, null, 2));
-  
+  */
 
   // info on WhatsApp text message payload: https://developers.facebook.com/docs/whatsapp/cloud-api/webhooks/payload-examples#text-messages
   if (req.body.object) {
@@ -133,7 +133,6 @@ app.post("/webhook", (req, res) => {
 
       if (type === "text") {
         var msg_body = req.body.entry[0].changes[0].value.messages[0].text.body; // extract the message text from the webhook payload
-	      console.log(msg_body)
       } else if (type === "button") {
         var msg_body =
           req.body.entry[0].changes[0].value.messages[0].button.text; // extract the message text from the webhook payload
@@ -192,7 +191,7 @@ app.post("/webhook", (req, res) => {
           },
         });
       }
-
+	
       function sendvideo(videotosend) {
         axios({
           method: "POST", // Required, HTTP method, a string, e.g. POST, GET
@@ -221,7 +220,7 @@ app.post("/webhook", (req, res) => {
       function onlyLettersandNumbers(str) {
   return /^[A-Za-z0-9]+$/.test(str);
 }
-
+	console.log("Testing first")
       axios({
         method: "POST", // Required, HTTP method, a string, e.g. POST, GET
         url:
@@ -241,6 +240,7 @@ app.post("/webhook", (req, res) => {
       });
 
       if (message.startsWith("$joke")) {
+	      console.log("Testing second")
         var query = message.substring(6, message.length);
         var query = query.charAt(0).toUpperCase() + query.slice(1);
         if (
